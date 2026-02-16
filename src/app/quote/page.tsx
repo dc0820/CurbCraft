@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import { Suspense, useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CurbDesigner from "@/components/CurbDesigner";
@@ -11,6 +11,14 @@ const CC_GOLD = "#ffc20e";
 const CC_GOLD_TEXT = "#111";
 
 export default function QuotePage() {
+  return (
+    <Suspense fallback={null}>
+      <QuotePageInner />
+    </Suspense>
+  );
+}
+
+function QuotePageInner() {
   const searchParams = useSearchParams();
   const raw = searchParams.get("design");
 
@@ -272,15 +280,10 @@ export default function QuotePage() {
                 {isSubmitting ? "Sending..." : "Send Quote Request →"}
               </button>
 
-                {/* ✅ Rainbow BACKGROUND button */}
-                <Link
-                  href="/create"
-                  className="cc-hover rainbow-btn"
-                  style={btnRainbow}
-                >
-                  Back to Create
-                </Link>
-
+              {/* ✅ Rainbow BACKGROUND button */}
+              <Link href="/create" className="cc-hover rainbow-btn" style={btnRainbow}>
+                Back to Create
+              </Link>
             </div>
 
             {!canSubmit && !submitOk && !submitErr && (
@@ -421,16 +424,6 @@ const actions: CSSProperties = {
   marginTop: 14,
 };
 
-const btnGhost: CSSProperties = {
-  background: "#f3f3f3",
-  color: "#111",
-  padding: "10px 12px",
-  borderRadius: 12,
-  fontWeight: 900,
-  textDecoration: "none",
-  display: "inline-block",
-};
-
 const btnGold: CSSProperties = {
   background: CC_GOLD,
   color: CC_GOLD_TEXT,
@@ -502,4 +495,3 @@ const btnRainbow: CSSProperties = {
   color: "#111",
   border: "1px solid rgba(0,0,0,0.12)",
 };
-
