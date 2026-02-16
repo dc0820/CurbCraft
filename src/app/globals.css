@@ -31,20 +31,118 @@ html,body{
 *{ box-sizing:border-box; }
 a{ color:inherit; text-decoration:none; }
 
-/* ✅ pulls header/nav inward a bit anywhere you use cc-container */
+/* -------------------------
+   Stage / Paper layering
+   (THIS fixes splats depth)
+   ------------------------- */
+
+.cc-stage{
+  min-height: 100vh;
+  position: relative;
+  padding: 26px 14px 48px;
+  background:
+    radial-gradient(900px 420px at 30% 8%, rgba(0,128,198,.08), transparent 60%),
+    radial-gradient(760px 420px at 75% 18%, rgba(255,194,14,.10), transparent 60%),
+    #f5f6f8;
+}
+
+/* Put underlay + back splats BEHIND the paper */
+.cc-underlay{
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  width: min(1040px, calc(100% - 28px));
+  height: calc(100% - 70px);
+  background: #fff;
+  border-radius: 18px;
+  box-shadow:
+    0 26px 70px rgba(0,0,0,.10),
+    0 8px 18px rgba(0,0,0,.08);
+  opacity: .95;
+  filter: saturate(.95);
+  z-index: 0;
+}
+
+/* splats that sit OUTSIDE paper, behind it */
+.cc-splats{
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: min(1040px, calc(100% - 28px));
+  height: 300px;
+  z-index: 1; /* behind paper */
+}
+
+.cc-splat{
+  position: absolute;
+  opacity: .95;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.18));
+}
+
+.cc-splat-pink{ left: -70px; top: -50px; width: 260px; transform: rotate(-10deg); opacity: .95; }
+.cc-splat-purple{ right: -110px; top: -70px; width: 360px; transform: rotate(12deg); opacity: .95; }
+.cc-splat-yellow{ right: -70px; top: 120px; width: 240px; transform: rotate(-6deg); opacity: .95; }
+.cc-splat-green{ left: -70px; top: 160px; width: 220px; transform: rotate(8deg); opacity: .95; }
+
+/* the paper must be ABOVE underlay/splats */
+.cc-paper{
+  position: relative;
+  z-index: 2;
+  max-width: 1040px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  overflow: clip;
+  box-shadow:
+    0 34px 90px rgba(0,0,0,.18),
+    0 10px 22px rgba(0,0,0,.12);
+}
+
+/* splats inside paper, but UNDER the header strip */
+.cc-splats-front{
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 300px;
+  z-index: 2; /* under header, over page background */
+}
+
+/* keep shell transparent (paper owns background) */
+.cc-shell{
+  max-width: 1040px;
+  margin: 0 auto;
+  background: transparent;
+
+  /* IMPORTANT: keep page content below header layer */
+  position: relative;
+  z-index: 1;
+}
+
+/* -------------------------
+   Header
+   ------------------------- */
+
+/* ✅ pulls header/nav inward anywhere you use cc-container inside header */
 .cc-header .cc-container{
   padding-left: 20px;
   padding-right: 20px;
 }
 
-/* =========================
-   Header (desktop + mobile)
-   ========================= */
-
+/*
+  ✅ This is the big fix:
+  - header is NOT sticky (won’t follow you)
+  - header has higher z-index than hero/splats
+  - header creates its own stacking context so nothing bleeds over it
+*/
 .cc-header{
-  position: sticky;
-  top: 0;
-  z-index: 80;
+  position: relative;         /* NOT sticky */
+  z-index: 50;                /* above hero & paper splats */
+  isolation: isolate;         /* creates a stacking context */
   background: #fff;
   border-bottom: 1px solid rgba(0,0,0,0.10);
 }
@@ -52,13 +150,16 @@ a{ color:inherit; text-decoration:none; }
 /* Desktop: 3 columns (links | logo | actions) */
 .cc-headerInner{
   height: 64px;
-  position: static;
   min-height: 64px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 14px;
   padding: 0;
+
+  /* keep it above any "front splats" */
+  position: relative;
+  z-index: 2;
 }
 
 .cc-brand{
@@ -70,7 +171,7 @@ a{ color:inherit; text-decoration:none; }
 
 .cc-brandImg{
   display: block; /* removes baseline spacing weirdness */
-  width: 180px;
+  width: 170px;
   height: auto;
   filter: drop-shadow(0 10px 14px rgba(0,0,0,0.25));
 }
@@ -102,16 +203,14 @@ a{ color:inherit; text-decoration:none; }
   box-shadow: 0 10px 24px rgba(0,0,0,0.12);
 }
 
-/* Mobile: stack (logo+CTA) then links */
+/* -------------------------
+   Mobile header layout
+   ------------------------- */
 @media (max-width: 640px){
-   .cc-header{
-    position: static;   /* stops it from sticking */
-  }
-
   .cc-headerInner{
     height: auto;
-    min-height: un;
-    padding: 16px 18px 14px;   /* balanced padding inside paper */
+    min-height: unset;
+    padding: 14px 16px 12px;
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-areas:
@@ -123,19 +222,20 @@ a{ color:inherit; text-decoration:none; }
   .cc-navLeft{
     grid-area: links;
     display: flex;
-    justify-content: center;   /* center top nav */
-    gap: 18px;                 /* better spacing */
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: nowrap;
   }
 
   .cc-brand{
     grid-area: brand;
     justify-content: flex-start;
-    align-items: center;
   }
 
   .cc-brandImg{
-    width: 115px;
-    transform: translateY(4px);  /* slight optical adjust */
+    width: 120px;
+    height: auto;
+    transform: translateY(2px);
   }
 
   .cc-navRight{
@@ -143,51 +243,68 @@ a{ color:inherit; text-decoration:none; }
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    flex-wrap: nowrap;
   }
 
   .cc-navLink{
-    padding: 4px 6px;
-    font-size: 15px;
+    padding: 6px 8px;
+    font-size: 14px;
+    white-space: nowrap;
   }
 
   .cc-faqLink{
-    font-size: 14px;
+    padding: 6px 8px;
+    font-size: 13px;
+    white-space: nowrap;
   }
 
   .cc-cta{
-    padding: 10px 16px;
-    font-size: 14px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-left: 0;
+    white-space: nowrap;
   }
 }
 
-/* Desktop: force nav links to sit perfectly centered in the header bar */
+/* -------------------------
+   Desktop header spacing + centering
+   ------------------------- */
 @media (min-width: 641px){
   .cc-headerInner{
+    /* better 3-column behavior */
     grid-template-columns: auto 1fr auto;
-    padding-left: 28px;   /* move left nav inward */
-    padding-right: 72px;  /* move right nav inward more */
+
+    /* ✅ “move them more in” */
+    padding-left: 28px;   /* left group inward */
+    padding-right: 72px;  /* right group inward */
   }
 
-  .cc-brand{ justify-content: center; }
-  .cc-navLeft{ justify-content: flex-start; }
-  .cc-navRight{ justify-content: flex-end; }
+  .cc-navLeft{
+    justify-content: flex-start;
+  }
 
-  /* stop using padding-right on the nav groups */
   .cc-brand{
+    justify-content: center;
     align-items: center;
     height: 14px;
   }
+
   .cc-brandImg{
     transform: translateY(34px);
   }
+
+  .cc-navRight{
+    justify-content: flex-end;
+  }
+
   .cc-navLink,
   .cc-faqLink{
     padding-top: 0;
     padding-bottom: 0;
-    height: 20px;              /* consistent hitbox */
+    height: 20px;
     display: inline-flex;
-    align-items: center;        /* <-- vertically centers text */
+    align-items: center;
   }
 
   .cc-cta{
@@ -199,13 +316,9 @@ a{ color:inherit; text-decoration:none; }
   }
 }
 
-
-.cc-shell{
-  max-width: 1040px;
-  margin: 0 auto;
-  background: #fff;
-}
-
+/* -------------------------
+   Hover / focus
+   ------------------------- */
 .cc-hover{
   transition:
     transform var(--cc-med) var(--cc-ease),
@@ -216,9 +329,7 @@ a{ color:inherit; text-decoration:none; }
     opacity var(--cc-fast) var(--cc-ease);
   will-change: transform;
 }
-.cc-hover:hover{
-  transform: translateY(-1px);
-}
+.cc-hover:hover{ transform: translateY(-1px); }
 
 :focus-visible{
   outline:3px solid rgba(0,128,198,.35);
@@ -258,91 +369,9 @@ a{ color:inherit; text-decoration:none; }
   }
 }
 
-/* --- "page on a page" stage --- */
-.cc-stage{
-  min-height: 100vh;
-  position: relative;
-  padding: 26px 14px 48px;
-  background:
-    radial-gradient(900px 420px at 30% 8%, rgba(0,128,198,.08), transparent 60%),
-    radial-gradient(760px 420px at 75% 18%, rgba(255,194,14,.10), transparent 60%),
-    #f5f6f8;
-}
-
-.cc-underlay{
-  position: absolute;
-  left: 50%;
-  top: 20px;
-  transform: translateX(-50%);
-  width: min(1040px, calc(100% - 28px));
-  height: calc(100% - 70px);
-  background: #fff;
-  border-radius: 18px;
-  box-shadow:
-    0 26px 70px rgba(0,0,0,.10),
-    0 8px 18px rgba(0,0,0,.08);
-  opacity: .95;
-  filter: saturate(.95);
-}
-
-/* splats that sit UNDER the top paper */
-.cc-splats{
-  pointer-events: none;
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  width: min(1040px, calc(100% - 28px));
-  height: 300px;
-  z-index: 1;
-}
-
-.cc-splat{
-  position: absolute;
-  opacity: .95;
-  filter: drop-shadow(0 10px 18px rgba(0,0,0,.18));
-}
-
-.cc-splat-pink{ left: -70px; top: -50px; width: 260px; transform: rotate(-10deg); opacity: .95; }
-.cc-splat-purple{ right: -110px; top: -70px; width: 360px; transform: rotate(12deg); opacity: .95; }
-.cc-splat-yellow{ right: -70px; top: 120px; width: 240px; transform: rotate(-6deg); opacity: .95; }
-.cc-splat-green{ left: 120px; top: 140px; width: 220px; transform: rotate(8deg); opacity: .95; }
-
-/* top paper */
-.cc-paper{
-  position: relative;
-  z-index: 2;
-  max-width: 1040px;
-  margin: 0 auto;
-  background: #fff;
-  border-radius: 18px;
-  overflow: clip;
-  box-shadow:
-    0 34px 90px rgba(0,0,0,.18),
-    0 10px 22px rgba(0,0,0,.12);
-}
-
-/* splats inside paper, under header strip */
-.cc-splats-front{
-  pointer-events: none;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 300px;
-  z-index: 3;
-}
-
-/* keep shell transparent (paper owns background) */
-.cc-shell{
-  max-width: 1040px;
-  margin: 0 auto;
-  background: transparent;
-}
-
-/* =========================
+/* -------------------------
    Rainbow hover for nav links
-   ========================= */
+   ------------------------- */
 .cc-rainbow-hover{
   position: relative;
   display: inline-block;
@@ -375,9 +404,9 @@ a{ color:inherit; text-decoration:none; }
   100%{ background-position: 100% 50%; }
 }
 
-/* =========================
-   Rainbow animated button (background)
-   ========================= */
+/* -------------------------
+   Rainbow animated button
+   ------------------------- */
 .rainbow-btn{
   background: linear-gradient(
     90deg,
@@ -405,13 +434,8 @@ a{ color:inherit; text-decoration:none; }
   100% { background-position: 100% 50%; }
 }
 
-/* =========================
-   Button-triggered rainbow TEXT
-   (hover anywhere on button)
-   ========================= */
-.cc-btn-rainbow .cc-btn-rainbow-text{
-  display: inline-block;
-}
+/* Button-triggered rainbow TEXT */
+.cc-btn-rainbow .cc-btn-rainbow-text{ display: inline-block; }
 
 .cc-btn-rainbow:hover .cc-btn-rainbow-text{
   background-image: linear-gradient(
@@ -435,9 +459,9 @@ a{ color:inherit; text-decoration:none; }
   animation: cc-rainbowShift 900ms linear infinite;
 }
 
-/* =========================
+/* -------------------------
    Tight footer
-   ========================= */
+   ------------------------- */
 .cc-footer-tight{
   margin-top: 0;
   padding-top: 10px;
@@ -480,7 +504,7 @@ a{ color:inherit; text-decoration:none; }
   font-size: 12px;
 }
 
-/* Optional (you said you reverted, but keeping it harmless) */
+/* Optional: Texas-flag text */
 .cc-flagText{
   display: inline-block;
   background-image: linear-gradient(
@@ -502,19 +526,12 @@ a{ color:inherit; text-decoration:none; }
     0 1px 0 rgba(0,0,0,0.25),
     0 2px 6px rgba(0,0,0,0.15);
 }
-/* rainbow background button */
+
+/* rainbow background button (your custom component) */
 .cc-btn-rainbow {
   position: relative;
   overflow: hidden;
-  isolation: isolate; /* keeps bg behind content */
-}
-.rainbow-btn{
-  display: inline-block;
-  padding: 10px 12px;
-  border-radius: 12px;
-  font-weight: 900;
-  color: #111;
-  text-decoration: none;
+  isolation: isolate;
 }
 
 .cc-btn-rainbow-bg{
@@ -522,7 +539,6 @@ a{ color:inherit; text-decoration:none; }
   inset: -2px;
   z-index: 0;
   border-radius: inherit;
-
   background: linear-gradient(
     90deg,
     #22c1c8,
@@ -533,35 +549,22 @@ a{ color:inherit; text-decoration:none; }
   );
   background-size: 300% 100%;
   background-position: 0% 50%;
-
-  /* ✅ key change: do NOT animate until hover */
   animation: none;
 }
 
-/* ✅ hover = start moving */
 .cc-btn-rainbow:hover .cc-btn-rainbow-bg{
   animation: cc-rainbow-move 1.2s linear infinite;
   filter: brightness(1.05);
 }
 
-/* keep text above bg */
-.cc-btn-rainbow-content {
+.cc-btn-rainbow-content{
   position: relative;
   z-index: 1;
-  color: #111; /* set to whatever you want for legibility */
+  color: #111;
   font-weight: 900;
 }
 
-/* optional: hover pop */
-.cc-btn-rainbow:hover .cc-btn-rainbow-bg {
-  filter: brightness(1.05);
-}
-
-@keyframes cc-rainbow-move {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
+@keyframes cc-rainbow-move{
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
