@@ -1,0 +1,405 @@
+/* curb-craft/src/app/globals.css */
+
+:root{
+  --cc-blue:#0080c6;
+  --cc-gold:#ffc20e;
+  --cc-navy:#002244;
+
+  --cc-teal:#22c1c8;
+  --cc-hotpink:#ff44a6;
+  --cc-lime:#a7e22e;
+  --cc-yellow:#ffd23a;
+  --cc-orange:#ff8a2a;
+
+  --cc-text:#0b1320;
+  --cc-muted:rgba(11,19,32,.70);
+  --cc-border:rgba(0,0,0,.10);
+
+  --cc-ease:cubic-bezier(.2,.8,.2,1);
+  --cc-fast:160ms;
+  --cc-med:240ms;
+}
+
+html,body{
+  padding:0;
+  margin:0;
+  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+  color:var(--cc-text);
+  background:#fff;
+}
+
+*{ box-sizing:border-box; }
+a{ color:inherit; text-decoration:none; }
+
+/* ✅ pulls header/nav inward a bit anywhere you use cc-container */
+.cc-container{
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 18px; /* bump this up/down to taste */
+}
+
+.cc-shell{
+  max-width: 1040px;
+  margin: 0 auto;
+  background: #fff;
+}
+
+.cc-hover{
+  transition:
+    transform var(--cc-med) var(--cc-ease),
+    box-shadow var(--cc-med) var(--cc-ease),
+    background var(--cc-med) var(--cc-ease),
+    border-color var(--cc-med) var(--cc-ease),
+    color var(--cc-med) var(--cc-ease),
+    opacity var(--cc-fast) var(--cc-ease);
+  will-change: transform;
+}
+.cc-hover:hover{
+  transform: translateY(-1px);
+}
+
+:focus-visible{
+  outline:3px solid rgba(0,128,198,.35);
+  outline-offset:2px;
+  border-radius:12px;
+}
+
+/* Outlined/cartoon heading helpers */
+.cc-stroke-black{
+  -webkit-text-stroke: 6px #0b0b0b;
+  paint-order: stroke fill;
+}
+
+.cc-heroTitle{
+  font-weight: 1000;
+  letter-spacing: .5px;
+  line-height: .9;
+  text-transform: uppercase;
+  text-shadow:
+    0 6px 0 rgba(0,0,0,.45),
+    0 18px 30px rgba(0,0,0,.35);
+}
+
+.cc-galleryTitle{
+  font-weight: 1000;
+  letter-spacing: 1px;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow:
+    0 6px 0 rgba(0,0,0,.45),
+    0 18px 30px rgba(0,0,0,.25);
+}
+
+@media (max-width: 860px){
+  .cc-cards3{
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* --- "page on a page" stage --- */
+.cc-stage{
+  min-height: 100vh;
+  position: relative;
+  padding: 26px 14px 48px;
+  background:
+    radial-gradient(900px 420px at 30% 8%, rgba(0,128,198,.08), transparent 60%),
+    radial-gradient(760px 420px at 75% 18%, rgba(255,194,14,.10), transparent 60%),
+    #f5f6f8;
+}
+
+.cc-underlay{
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  width: min(1040px, calc(100% - 28px));
+  height: calc(100% - 70px);
+  background: #fff;
+  border-radius: 18px;
+  box-shadow:
+    0 26px 70px rgba(0,0,0,.10),
+    0 8px 18px rgba(0,0,0,.08);
+  opacity: .95;
+  filter: saturate(.95);
+}
+
+/* splats that sit UNDER the top paper */
+.cc-splats{
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: min(1040px, calc(100% - 28px));
+  height: 300px;
+  z-index: 1;
+}
+
+.cc-splat{
+  position: absolute;
+  opacity: .95;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.18));
+}
+
+.cc-splat-pink{ left: -70px; top: -50px; width: 260px; transform: rotate(-10deg); opacity: .95; }
+.cc-splat-purple{ right: -110px; top: -70px; width: 360px; transform: rotate(12deg); opacity: .95; }
+.cc-splat-yellow{ right: -70px; top: 120px; width: 240px; transform: rotate(-6deg); opacity: .95; }
+.cc-splat-green{ left: 120px; top: 140px; width: 220px; transform: rotate(8deg); opacity: .95; }
+
+/* top paper */
+.cc-paper{
+  position: relative;
+  z-index: 2;
+  max-width: 1040px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow:
+    0 34px 90px rgba(0,0,0,.18),
+    0 10px 22px rgba(0,0,0,.12);
+}
+
+/* splats inside paper, under header strip */
+.cc-splats-front{
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 300px;
+  z-index: 3;
+}
+
+/* keep shell transparent (paper owns background) */
+.cc-shell{
+  max-width: 1040px;
+  margin: 0 auto;
+  background: transparent;
+}
+
+/* =========================
+   Rainbow hover for nav links
+   ========================= */
+.cc-rainbow-hover{
+  position: relative;
+  display: inline-block;
+}
+
+.cc-rainbow-hover:hover{
+  background-image: linear-gradient(
+    90deg,
+    #ff2d2d,
+    #ff8a2a,
+    #ffd23a,
+    #a7e22e,
+    #22c1c8,
+    #2e86ff,
+    #7c4dff,
+    #ff44a6,
+    #ff2d2d
+  );
+  background-size: 240% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  animation: cc-rainbowShift 900ms linear infinite;
+}
+
+@keyframes cc-rainbowShift{
+  0%{ background-position: 0% 50%; }
+  100%{ background-position: 100% 50%; }
+}
+
+/* =========================
+   Rainbow animated button (background)
+   ========================= */
+.rainbow-btn{
+  background: linear-gradient(
+    90deg,
+    #ff2d2d,
+    #ff8a2a,
+    #ffd23a,
+    #a7e22e,
+    #22c1c8,
+    #2e86ff,
+    #b44cff,
+    #ff2d2d
+  );
+  background-size: 250% 100%;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.rainbow-btn:hover{
+  animation: rainbowShift 1.2s linear infinite;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 24px 50px rgba(0,0,0,0.25);
+}
+
+@keyframes rainbowShift{
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* =========================
+   Button-triggered rainbow TEXT
+   (hover anywhere on button)
+   ========================= */
+.cc-btn-rainbow .cc-btn-rainbow-text{
+  display: inline-block;
+}
+
+.cc-btn-rainbow:hover .cc-btn-rainbow-text{
+  background-image: linear-gradient(
+    90deg,
+    #ff2d2d,
+    #ff8a2a,
+    #ffd23a,
+    #a7e22e,
+    #22c1c8,
+    #2e86ff,
+    #b44cff,
+    #ff44a6,
+    #ff2d2d
+  );
+  background-size: 260% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  animation: cc-rainbowShift 900ms linear infinite;
+}
+
+/* =========================
+   Tight footer
+   ========================= */
+.cc-footer-tight{
+  margin-top: 0;
+  padding-top: 10px;
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.cc-footer-inner{
+  padding: 12px 14px 10px;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.cc-footer-title{
+  font-weight: 1000;
+  margin: 0;
+  padding: 0;
+}
+
+.cc-footer-link{
+  font-size: 13px;
+  opacity: 0.92;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.cc-footer-based{
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.cc-footer-bottom{
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding: 8px 14px;
+  text-align: center;
+  color: rgba(0,0,0,0.55);
+  font-size: 12px;
+}
+
+/* Optional (you said you reverted, but keeping it harmless) */
+.cc-flagText{
+  display: inline-block;
+  background-image: linear-gradient(
+    90deg,
+    #e11d2e 0%,
+    #e11d2e 33.333%,
+    #ffffff 33.333%,
+    #ffffff 66.666%,
+    #1d4ed8 66.666%,
+    #1d4ed8 100%
+  );
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.25),
+    0 2px 6px rgba(0,0,0,0.15);
+}
+/* rainbow background button */
+.cc-btn-rainbow {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate; /* keeps bg behind content */
+}
+.rainbow-btn{
+  display: inline-block;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 900;
+  color: #111;
+  text-decoration: none;
+}
+
+.cc-btn-rainbow-bg{
+  position: absolute;
+  inset: -2px;
+  z-index: 0;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    #22c1c8,
+    #ffd23f,
+    #ff44a6,
+    #a7e22e,
+    #22c1c8
+  );
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+
+  /* ✅ key change: do NOT animate until hover */
+  animation: none;
+}
+
+/* ✅ hover = start moving */
+.cc-btn-rainbow:hover .cc-btn-rainbow-bg{
+  animation: cc-rainbow-move 1.2s linear infinite;
+  filter: brightness(1.05);
+}
+
+/* keep text above bg */
+.cc-btn-rainbow-content {
+  position: relative;
+  z-index: 1;
+  color: #111; /* set to whatever you want for legibility */
+  font-weight: 900;
+}
+
+/* optional: hover pop */
+.cc-btn-rainbow:hover .cc-btn-rainbow-bg {
+  filter: brightness(1.05);
+}
+
+@keyframes cc-rainbow-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
