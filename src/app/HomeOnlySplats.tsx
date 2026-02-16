@@ -8,7 +8,19 @@ export default function HomeOnlySplats() {
   if (pathname !== "/") return null;
 
   return (
-    <div className="cc-splats-front" aria-hidden="true">
+    <div
+      className="cc-splats-front"
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        left: 0,
+        top: 0,
+        width: "100%",
+        height: 300,
+        pointerEvents: "none",
+        zIndex: 3,
+      }}
+    >
       <img className="cc-splat cc-splat-pink" src="/Logos/paint/paint-pink.png" alt="" />
       <img className="cc-splat cc-splat-purple" src="/Logos/paint/paint-purple.png" alt="" />
       <img className="cc-splat cc-splat-yellow" src="/Logos/paint/paint-yellow.png" alt="" />
