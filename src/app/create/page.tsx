@@ -8,6 +8,8 @@ import { useSearchParams } from "next/navigation";
 import CurbDesigner from "@/components/CurbDesigner";
 import HomePreviewRotator from "@/app/HomePreviewRotator";
 
+export const dynamic = "force-dynamic";
+
 import {
   BASIC_LOGOS,
   BASIC_BG_COLORS,
