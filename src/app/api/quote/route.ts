@@ -12,37 +12,9 @@ function normalizePhone(v: unknown) {
   return v.replace(/[^0-9]/g, "");
 }
 
-function makeRequestId() {
-  // Works in Node + Edge runtimes that support crypto.randomUUID()
-  // Fallback kept simple.
-  // @ts-ignore
-  return (globalThis.crypto?.randomUUID?.() as string) ?? `req_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-}
-
-function log(event: string, data: Record<string, unknown>) {
-  // One-line JSON log = easiest to scan/filter in Vercel
-  console.log(
-    JSON.stringify({
-      ts: new Date().toISOString(),
-      level: "info",
-      event,
-      ...data,
-    })
-  );
-}
-
 export async function POST(req: Request) {
-  const requestId = makeRequestId();
-
   try {
     const body = (await req.json()) as AnyObj;
-
-    // OPTIONAL: basic size guard so someone can't spam a massive payload
-    const rawSize = JSON.stringify(body).length;
-    if (rawSize > 150_000) {
-      log("quote_rejected", { requestId, reason: "payload_too_large", rawSize });
-      return NextResponse.json({ error: "Payload too large." }, { status: 413 });
-    }
 
     const name = String(body?.name ?? "").trim();
     const phoneRaw = String(body?.phone ?? "").trim();
@@ -56,17 +28,10 @@ export async function POST(req: Request) {
 
     // Minimal validation (same rule as UI)
     if (name.length < 2) {
-      log("quote_rejected", { requestId, reason: "missing_name" });
       return NextResponse.json({ error: "Name is required." }, { status: 400 });
     }
 
     if (!(phoneDigits.length >= 7 || isValidEmail(email))) {
-      log("quote_rejected", {
-        requestId,
-        reason: "missing_contact",
-        phoneDigitsLen: phoneDigits.length,
-        hasEmail: Boolean(email),
-      });
       return NextResponse.json(
         { error: "Provide a valid phone number or email." },
         { status: 400 }
@@ -74,21 +39,17 @@ export async function POST(req: Request) {
     }
 
     if (!design) {
-      log("quote_rejected", { requestId, reason: "missing_design" });
       return NextResponse.json({ error: "Missing design data." }, { status: 400 });
     }
 
-    const ip =
-      req.headers.get("x-forwarded-for") ??
-      req.headers.get("x-real-ip") ??
-      "";
+    // OPTIONAL: basic size guard so someone can't spam a massive payload
+    const rawSize = JSON.stringify(body).length;
+    if (rawSize > 150_000) {
+      return NextResponse.json({ error: "Payload too large." }, { status: 413 });
+    }
 
-    const userAgent = req.headers.get("user-agent") ?? "";
-
-    // Full payload (what you’ll email/store later)
     const payload = {
       createdAt: new Date().toISOString(),
-      requestId,
       contact: {
         name,
         phone: phoneRaw,
@@ -99,38 +60,23 @@ export async function POST(req: Request) {
       summaryLines,
       design,
       meta: {
-        userAgent,
-        ip,
+        userAgent: req.headers.get("user-agent") ?? "",
+        ip:
+          req.headers.get("x-forwarded-for") ??
+          req.headers.get("x-real-ip") ??
+          "",
       },
     };
 
-    // Log a *summary* that is easy to scan (keep the full payload for DB/email)
-    const tier =
-      typeof design?.tier === "string" ? (design.tier as string) : undefined;
+    // For now: log it (works locally + on server logs).
+    console.log("NEW QUOTE REQUEST:", JSON.stringify(payload, null, 2));
 
-    log("quote_received", {
-      requestId,
-      tier,
-      address: typeof design?.address === "string" ? design.address : undefined,
-      price: typeof design?.price === "number" ? design.price : undefined,
-      summaryLinesCount: summaryLines.length,
-      hasComments: comments.length > 0,
-      phoneLast4: phoneDigits.length >= 4 ? phoneDigits.slice(-4) : "",
-      hasEmail: Boolean(email),
-    });
+    // Later: send email (Resend) or save to DB (Supabase) here.
 
-    // If you still want the full thing in logs sometimes, do it behind a flag:
-    // log("quote_payload", { requestId, payload });
-
-    return NextResponse.json({ ok: true, requestId });
+    return NextResponse.json({ ok: true });
   } catch (e: any) {
-    log("quote_error", {
-      requestId,
-      message: e?.message ?? "Invalid request",
-    });
-
     return NextResponse.json(
-      { error: e?.message ?? "Invalid request", requestId },
+      { error: e?.message ?? "Invalid request" },
       { status: 400 }
     );
   }
