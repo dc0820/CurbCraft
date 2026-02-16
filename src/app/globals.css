@@ -88,6 +88,8 @@ a{ color:inherit; text-decoration:none; }
 .cc-splat-green{ left: -70px; top: 160px; width: 220px; transform: rotate(8deg); opacity: .95; }
 
 /* the paper must be ABOVE underlay/splats */
+/* ========= FIX LAYERS ========= */
+/* Make the paper the stacking root */
 .cc-paper{
   position: relative;
   z-index: 2;
@@ -101,7 +103,7 @@ a{ color:inherit; text-decoration:none; }
     0 10px 22px rgba(0,0,0,.12);
 }
 
-/* splats inside paper, but UNDER the header strip */
+/* These splats should NEVER sit above the header/hero text */
 .cc-splats-front{
   pointer-events: none;
   position: absolute;
@@ -109,18 +111,14 @@ a{ color:inherit; text-decoration:none; }
   top: 0;
   width: 100%;
   height: 300px;
-  z-index: 2; /* under header, over page background */
+  z-index: 0;              /* ✅ put behind content */
 }
 
-/* keep shell transparent (paper owns background) */
+/* Keep header + page content above any splats */
+.cc-header,
 .cc-shell{
-  max-width: 1040px;
-  margin: 0 auto;
-  background: transparent;
-
-  /* IMPORTANT: keep page content below header layer */
   position: relative;
-  z-index: 1;
+  z-index: 2;              /* ✅ above splats-front */
 }
 
 /* -------------------------
@@ -207,65 +205,80 @@ a{ color:inherit; text-decoration:none; }
    Mobile header layout
    ------------------------- */
 @media (max-width: 640px){
+  /* header should not stick on mobile */
+  .cc-header{
+    position: static;
+  }
+
   .cc-headerInner{
     height: auto;
     min-height: unset;
-    padding: 14px 16px 12px;
+    padding: 14px 14px 12px;
     display: grid;
+
+    /* 2 columns on row 1, logo spans row 2 */
     grid-template-columns: 1fr auto;
     grid-template-areas:
-      "links links"
-      "brand actions";
+      "links actions"
+      "brand brand";
+
     row-gap: 10px;
+    column-gap: 10px;
+    align-items: center;
   }
 
   .cc-navLeft{
     grid-area: links;
     display: flex;
-    justify-content: center;
-    gap: 14px;
-    flex-wrap: nowrap;
-  }
-
-  .cc-brand{
-    grid-area: brand;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;           /* ✅ allows wrap instead of overflow */
     justify-content: flex-start;
-  }
-
-  .cc-brandImg{
-    width: 120px;
-    height: auto;
-    transform: translateY(2px);
   }
 
   .cc-navRight{
     grid-area: actions;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
     gap: 10px;
+    justify-content: flex-end;
     flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+
+  .cc-brand{
+    grid-area: brand;
+    display: flex;
+    justify-content: center;   /* ✅ centered under top row */
+    align-items: center;
+  }
+
+  .cc-brandImg{
+    width: 125px;
+    height: auto;
+    transform: none;           /* ✅ don’t push down on mobile */
   }
 
   .cc-navLink{
     padding: 6px 8px;
-    font-size: 14px;
+    font-size: 15px;
     white-space: nowrap;
   }
 
   .cc-faqLink{
     padding: 6px 8px;
-    font-size: 13px;
+    font-size: 14px;
     white-space: nowrap;
   }
 
   .cc-cta{
     padding: 10px 14px;
-    font-size: 13px;
+    font-size: 14px;
     margin-left: 0;
     white-space: nowrap;
   }
 }
+
 
 /* -------------------------
    Desktop header spacing + centering
