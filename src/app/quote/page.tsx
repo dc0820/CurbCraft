@@ -346,7 +346,12 @@ const textarea: CSSProperties = {
   fontFamily: "inherit",
 };
 
-const actions: CSSProperties = { display: "flex", gap: 10, flexWrap: "wrap", marginTop: 14 };
+const actions: CSSProperties = {
+  display: "flex",
+  gap: 10,
+  flexWrap: "wrap",
+  marginTop: 14,
+};
 
 const btnGold: CSSProperties = {
   background: CC_GOLD,
@@ -369,6 +374,19 @@ const successBox: CSSProperties = { marginTop: 10, fontSize: 13, background: "#e
 
 const errorInline: CSSProperties = { marginTop: 10, fontSize: 13, background: "#ffecec", border: "1px solid rgba(0,0,0,0.12)", borderRadius: 12, padding: 10 };
 
-const errorBox: CSSProperties = { border: "1px solid rgba(0,0,0,0.12)", borderRadius: 18, padding: 16, background: "#fff" };
+const errorBox: CSSProperties = {
+  border: "1px solid rgba(0,0,0,0.12)",
+  borderRadius: 18,
+  padding: 16,
+  background: "#fff",
+};
 
-const btnRainbow: CSSProperties = { padding: "10px 12px", borderRadius: 12, fontWeight: 900, textDecoration: "none", display: "inline-block", color: "#111", border: "1px solid rgba(0,0,0,0.12)" };
+const btnRainbow: CSSProperties = {
+  padding: "10px 12px",
+  borderRadius: 12,
+  fontWeight: 900,
+  textDecoration: "none",
+  display: "inline-block",
+  color: "#111",
+  border: "1px solid rgba(0,0,0,0.12)",
+};
