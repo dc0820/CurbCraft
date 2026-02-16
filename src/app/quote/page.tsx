@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CurbDesigner from "@/components/CurbDesigner";
 
+export const dynamic = "force-dynamic";
+
 type AnyObj = Record<string, any>;
 
 const CC_GOLD = "#ffc20e";
