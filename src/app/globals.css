@@ -38,6 +38,116 @@ a{ color:inherit; text-decoration:none; }
   padding: 0 18px; /* bump this up/down to taste */
 }
 
+/* =========================
+   Header (desktop + mobile)
+   ========================= */
+
+.cc-header{
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,0.10);
+}
+
+/* Desktop: 3 columns (links | logo | actions) */
+.cc-headerInner{
+  height: 64px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;     /* ✅ center again */
+  gap: 14px;
+  padding: 0 14px;         /* ✅ remove the 8px top padding */
+}
+
+
+.cc-navLeft,
+.cc-navRight{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transform: translateY(-54px);
+}
+
+.cc-navRight{ justify-content: flex-end; }
+
+.cc-brand{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-18px); /* ✅ tiny optical centering */
+}
+
+.cc-brandImg{
+  display: block; /* removes baseline spacing weirdness */
+  width: 180px;
+  height: auto;
+  filter: drop-shadow(0 10px 14px rgba(0,0,0,0.25));
+}
+
+.cc-navLink{
+  font-weight: 800;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.cc-faqLink{
+  font-weight: 900;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  letter-spacing: 0.3px;
+  opacity: 0.95;
+}
+
+.cc-cta{
+  margin-left: 8px;
+  background: linear-gradient(90deg, var(--cc-gold), var(--cc-gold));
+  color: #111;
+  font-weight: 900;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+/* Mobile: stack (logo+CTA) then links */
+@media (max-width: 640px){
+  .cc-headerInner{
+    height: auto;
+    padding: 10px 12px;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "brand cta"
+      "links links";
+    row-gap: 8px;
+  }
+
+  .cc-brand{ grid-area: brand; justify-content: flex-start; }
+  .cc-navRight{ grid-area: cta; }
+  .cc-navLeft{
+    grid-area: links;
+    flex-wrap: wrap;
+    gap: 6px;
+    transform: translateY(-1px);
+  }
+
+  .cc-brandImg{ width: 140px; }
+
+  .cc-navLink,
+  .cc-faqLink{
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .cc-cta{
+    padding: 9px 12px;
+    font-size: 13px;
+    margin-left: 0;
+  }
+}
+
 .cc-shell{
   max-width: 1040px;
   margin: 0 auto;
@@ -403,116 +513,11 @@ a{ color:inherit; text-decoration:none; }
     background-position: 100% 50%;
   }
 }
-
-
-/* =========================
-   Header (responsive)
-   ========================= */
-
-.cc-header{
-  position: sticky;
-  top: 0;
-  z-index: 80;
-  background: #fff;
-  border-bottom: 1px solid rgba(0,0,0,0.10);
+/* Fix header text being pushed down by .cc-container spacing */
+.cc-header .cc-container{
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
-/* Desktop: 3 columns (links | logo | right actions) */
-.cc-headerInner{
-  height: 64px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 10px;
-  padding: 0 14px;
-}
-
-.cc-navLeft,
-.cc-navRight{
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.cc-navRight{
-  justify-content: flex-end;
-}
-
-.cc-brand{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cc-brandImg{
-  width: 180px;
-  height: auto;
-  filter: drop-shadow(0 10px 14px rgba(0,0,0,0.25));
-}
-
-.cc-navLink{
-  font-weight: 800;
-  font-size: 14px;
-  padding: 10px 12px;
-  border-radius: 12px;
-}
-
-.cc-faqLink{
-  font-weight: 900;
-  font-size: 14px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  letter-spacing: 0.3px;
-  opacity: 0.95;
-}
-
-.cc-cta{
-  margin-left: 8px;
-  background: linear-gradient(90deg, var(--cc-gold), var(--cc-gold));
-  color: #111;
-  font-weight: 900;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(0,0,0,0.10);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-}
-
-/* Mobile: stack into 2 rows (logo+CTA on top, links below) */
-@media (max-width: 640px){
-  .cc-headerInner{
-    height: auto;
-    padding: 10px 12px;
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      "brand cta"
-      "links links";
-    row-gap: 8px;
-  }
-
-  .cc-brand{ grid-area: brand; justify-content: flex-start; }
-  .cc-navRight{ grid-area: cta; }
-  .cc-navLeft{
-    grid-area: links;
-    flex-wrap: wrap;     /* ✅ lets links wrap instead of overflow */
-    gap: 4px;
-  }
-
-  .cc-brandImg{ width: 140px; }
-
-  .cc-navLink,
-  .cc-faqLink{
-    padding: 8px 10px;
-    font-size: 13px;
-  }
-
-  .cc-cta{
-    padding: 9px 12px;
-    font-size: 13px;
-    margin-left: 0;
-  }
-
-  /* optional: slightly tighter stage padding on mobile */
-  .cc-stage{
-    padding: 16px 10px 34px;
-  }
-}
