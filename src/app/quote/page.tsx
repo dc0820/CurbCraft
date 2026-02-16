@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CurbDesigner from "@/components/CurbDesigner";
 
-export const dynamic = "force-dynamic";
-
 type AnyObj = Record<string, any>;
 
 const CC_GOLD = "#ffc20e";
@@ -56,7 +54,6 @@ function QuotePageInner() {
 
   const isCustom = displayTier === "custom";
 
-  // Build a clean summary string
   const summaryLines = useMemo(() => {
     if (!design) return [];
 
@@ -81,8 +78,7 @@ function QuotePageInner() {
       if (cfg.plateStyle) lines.push(`Plate: ${String(cfg.plateStyle)}`);
       if (cfg.logoSide) lines.push(`Logo side: ${String(cfg.logoSide)}`);
       if (cfg.topBandStyle) lines.push(`Top band: ${String(cfg.topBandStyle)}`);
-      if (cfg.teamBannerBorderStyle)
-        lines.push(`Banner border: ${String(cfg.teamBannerBorderStyle)}`);
+      if (cfg.teamBannerBorderStyle) lines.push(`Banner border: ${String(cfg.teamBannerBorderStyle)}`);
       lines.push(`Tint: ${cfg.tintEnabled ? "ON" : "OFF"}`);
       if (cfg.tintEnabled && cfg.tintStyle) lines.push(`Tint style: ${String(cfg.tintStyle)}`);
       lines.push(`Jersey texture: ${cfg.jerseyTexture ? "ON" : "OFF"}`);
@@ -90,11 +86,9 @@ function QuotePageInner() {
 
     // Basic specifics
     if (uiTier === "basic") {
-      if (Array.isArray(cfg.addOns) && cfg.addOns.length)
-        lines.push(`Add-ons: ${cfg.addOns.join(", ")}`);
+      if (Array.isArray(cfg.addOns) && cfg.addOns.length) lines.push(`Add-ons: ${cfg.addOns.join(", ")}`);
       if (cfg.basicBgColor) lines.push(`Background preset: ${String(cfg.basicBgColor)}`);
-      if (typeof cfg.basicWhiteBox !== "undefined")
-        lines.push(`White address box: ${cfg.basicWhiteBox ? "ON" : "OFF"}`);
+      if (typeof cfg.basicWhiteBox !== "undefined") lines.push(`White address box: ${cfg.basicWhiteBox ? "ON" : "OFF"}`);
       if (cfg.basicLogoLeft) lines.push(`Logo left: ${String(cfg.basicLogoLeft)}`);
       if (cfg.basicLogoRight) lines.push(`Logo right: ${String(cfg.basicLogoRight)}`);
     }
@@ -110,11 +104,7 @@ function QuotePageInner() {
   }, [design]);
 
   const canSubmit = useMemo(() => {
-    return (
-      name.trim().length >= 2 &&
-      (phone.trim().length >= 7 || email.trim().includes("@")) &&
-      !!design
-    );
+    return name.trim().length >= 2 && (phone.trim().length >= 7 || email.trim().includes("@")) && !!design;
   }, [name, phone, email, design]);
 
   async function submitQuote() {
@@ -156,8 +146,7 @@ function QuotePageInner() {
         <div>
           <h1 style={title}>Get a Quote</h1>
           <p style={subtitle}>
-            Review your design, then tell us any details. We’ll respond with a final quote and
-            scheduling options.
+            Review your design, then tell us any details. We’ll respond with a final quote and scheduling options.
           </p>
         </div>
 
@@ -170,9 +159,7 @@ function QuotePageInner() {
       {!design ? (
         <div style={errorBox}>
           <div style={{ fontWeight: 900, marginBottom: 6 }}>No design data found.</div>
-          <div style={{ opacity: 0.8 }}>
-            Go back to Create, configure a design, then click “Get Quote for This”.
-          </div>
+          <div style={{ opacity: 0.8 }}>Go back to Create, configure a design, then click “Get Quote for This”.</div>
           <div style={{ marginTop: 12 }}>
             <Link href="/create" className="cc-hover rainbow-btn" style={btnRainbow}>
               Back to Create
@@ -181,7 +168,6 @@ function QuotePageInner() {
         </div>
       ) : (
         <div style={isCustom ? singleColWrap : grid}>
-          {/* Preview (HIDE ONLY FOR CUSTOM) */}
           {!isCustom && (
             <div style={card}>
               <div style={cardTitle}>Preview</div>
@@ -194,7 +180,6 @@ function QuotePageInner() {
             </div>
           )}
 
-          {/* Details + form (ALWAYS) */}
           <div style={card}>
             <div style={cardTitle}>Details</div>
 
@@ -211,21 +196,15 @@ function QuotePageInner() {
 
             {isCustom && (
               <div style={yellowTip}>
-                <strong>Custom request:</strong> describe the theme, colors, logos, and anything
-                special (college / international / multiple teams, etc.). The more detail, the more
-                accurate the quote.
+                <strong>Custom request:</strong> describe the theme, colors, logos, and anything special (college /
+                international / multiple teams, etc.). The more detail, the more accurate the quote.
               </div>
             )}
 
             <div style={{ display: "grid", gap: 10 }}>
               <div>
                 <div style={label}>Your name</div>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  style={input}
-                  autoComplete="name"
-                />
+                <input value={name} onChange={(e) => setName(e.target.value)} style={input} autoComplete="name" />
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
@@ -282,7 +261,6 @@ function QuotePageInner() {
                 {isSubmitting ? "Sending..." : "Send Quote Request →"}
               </button>
 
-              {/* ✅ Rainbow BACKGROUND button */}
               <Link href="/create" className="cc-hover rainbow-btn" style={btnRainbow}>
                 Back to Create
               </Link>
@@ -293,7 +271,6 @@ function QuotePageInner() {
             )}
 
             {submitOk && <div style={successBox}>✅ Quote request sent! We’ll reach out soon.</div>}
-
             {submitErr && <div style={errorInline}>❌ {submitErr}</div>}
           </div>
         </div>
@@ -303,11 +280,7 @@ function QuotePageInner() {
 }
 
 /* styles */
-const page: CSSProperties = {
-  maxWidth: 1200,
-  margin: "0 auto",
-  padding: "0 24px",
-};
+const page: CSSProperties = { maxWidth: 1200, margin: "0 auto", padding: "0 24px" };
 
 const headerRow: CSSProperties = {
   display: "flex",
@@ -319,20 +292,9 @@ const headerRow: CSSProperties = {
   marginBottom: 14,
 };
 
-const title: CSSProperties = {
-  margin: 0,
-  fontSize: 42,
-  fontWeight: 900,
-  letterSpacing: -0.5,
-};
+const title: CSSProperties = { margin: 0, fontSize: 42, fontWeight: 900, letterSpacing: -0.5 };
 
-const subtitle: CSSProperties = {
-  marginTop: 10,
-  marginBottom: 0,
-  opacity: 0.75,
-  fontSize: 16,
-  maxWidth: 720,
-};
+const subtitle: CSSProperties = { marginTop: 10, marginBottom: 0, opacity: 0.75, fontSize: 16, maxWidth: 720 };
 
 const pricePill: CSSProperties = {
   border: "1px solid #eee",
@@ -350,25 +312,11 @@ const grid: CSSProperties = {
   alignItems: "start",
 };
 
-const singleColWrap: CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: 12,
-};
+const singleColWrap: CSSProperties = { display: "grid", gridTemplateColumns: "1fr", gap: 12 };
 
-const card: CSSProperties = {
-  border: "1px solid #eee",
-  borderRadius: 18,
-  padding: 16,
-  background: "#fff",
-};
+const card: CSSProperties = { border: "1px solid #eee", borderRadius: 18, padding: 16, background: "#fff" };
 
-const cardTitle: CSSProperties = {
-  fontWeight: 900,
-  fontSize: 14,
-  opacity: 0.8,
-  marginBottom: 10,
-};
+const cardTitle: CSSProperties = { fontWeight: 900, fontSize: 14, opacity: 0.8, marginBottom: 10 };
 
 const previewFrame: CSSProperties = {
   borderRadius: 16,
@@ -377,36 +325,15 @@ const previewFrame: CSSProperties = {
   background: "#fafafa",
 };
 
-const summaryBox: CSSProperties = {
-  background: "#fafafa",
-  border: "1px solid #eee",
-  borderRadius: 14,
-  padding: 12,
-  marginBottom: 12,
-};
+const summaryBox: CSSProperties = { background: "#fafafa", border: "1px solid #eee", borderRadius: 14, padding: 12, marginBottom: 12 };
 
-const ul: CSSProperties = {
-  margin: 0,
-  paddingLeft: 18,
-  display: "grid",
-  gap: 6,
-};
+const ul: CSSProperties = { margin: 0, paddingLeft: 18, display: "grid", gap: 6 };
 
-const li: CSSProperties = {
-  opacity: 0.9,
-  fontSize: 14,
-  lineHeight: 1.35,
-};
+const li: CSSProperties = { opacity: 0.9, fontSize: 14, lineHeight: 1.35 };
 
 const label: CSSProperties = { fontSize: 13, fontWeight: 900, opacity: 0.85 };
 
-const input: CSSProperties = {
-  width: "100%",
-  padding: "10px 12px",
-  borderRadius: 12,
-  border: "1px solid #e7e7e7",
-  outline: "none",
-};
+const input: CSSProperties = { width: "100%", padding: "10px 12px", borderRadius: 12, border: "1px solid #e7e7e7", outline: "none" };
 
 const textarea: CSSProperties = {
   width: "100%",
@@ -419,12 +346,7 @@ const textarea: CSSProperties = {
   fontFamily: "inherit",
 };
 
-const actions: CSSProperties = {
-  display: "flex",
-  gap: 10,
-  flexWrap: "wrap",
-  marginTop: 14,
-};
+const actions: CSSProperties = { display: "flex", gap: 10, flexWrap: "wrap", marginTop: 14 };
 
 const btnGold: CSSProperties = {
   background: CC_GOLD,
@@ -437,63 +359,16 @@ const btnGold: CSSProperties = {
   border: "1px solid rgba(0,0,0,0.15)",
 };
 
-const miniNote: CSSProperties = {
-  marginTop: 10,
-  fontSize: 13,
-  opacity: 0.75,
-};
+const miniNote: CSSProperties = { marginTop: 10, fontSize: 13, opacity: 0.75 };
 
-const miniWarn: CSSProperties = {
-  marginTop: 10,
-  fontSize: 13,
-  opacity: 0.8,
-  background: "#fff7d6",
-  border: "1px solid rgba(0,0,0,0.12)",
-  borderRadius: 12,
-  padding: 10,
-};
+const miniWarn: CSSProperties = { marginTop: 10, fontSize: 13, opacity: 0.8, background: "#fff7d6", border: "1px solid rgba(0,0,0,0.12)", borderRadius: 12, padding: 10 };
 
-const yellowTip: CSSProperties = {
-  background: "#fff7d6",
-  border: "1px solid rgba(0,0,0,0.12)",
-  borderRadius: 14,
-  padding: "12px 12px",
-  marginBottom: 12,
-  fontSize: 14,
-  lineHeight: 1.4,
-};
+const yellowTip: CSSProperties = { background: "#fff7d6", border: "1px solid rgba(0,0,0,0.12)", borderRadius: 14, padding: "12px 12px", marginBottom: 12, fontSize: 14, lineHeight: 1.4 };
 
-const successBox: CSSProperties = {
-  marginTop: 10,
-  fontSize: 13,
-  background: "#eaffea",
-  border: "1px solid rgba(0,0,0,0.12)",
-  borderRadius: 12,
-  padding: 10,
-};
+const successBox: CSSProperties = { marginTop: 10, fontSize: 13, background: "#eaffea", border: "1px solid rgba(0,0,0,0.12)", borderRadius: 12, padding: 10 };
 
-const errorInline: CSSProperties = {
-  marginTop: 10,
-  fontSize: 13,
-  background: "#ffecec",
-  border: "1px solid rgba(0,0,0,0.12)",
-  borderRadius: 12,
-  padding: 10,
-};
+const errorInline: CSSProperties = { marginTop: 10, fontSize: 13, background: "#ffecec", border: "1px solid rgba(0,0,0,0.12)", borderRadius: 12, padding: 10 };
 
-const errorBox: CSSProperties = {
-  border: "1px solid rgba(0,0,0,0.12)",
-  borderRadius: 18,
-  padding: 16,
-  background: "#fff",
-};
+const errorBox: CSSProperties = { border: "1px solid rgba(0,0,0,0.12)", borderRadius: 18, padding: 16, background: "#fff" };
 
-const btnRainbow: CSSProperties = {
-  padding: "10px 12px",
-  borderRadius: 12,
-  fontWeight: 900,
-  textDecoration: "none",
-  display: "inline-block",
-  color: "#111",
-  border: "1px solid rgba(0,0,0,0.12)",
-};
+const btnRainbow: CSSProperties = { padding: "10px 12px", borderRadius: 12, fontWeight: 900, textDecoration: "none", display: "inline-block", color: "#111", border: "1px solid rgba(0,0,0,0.12)" };
