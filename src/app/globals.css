@@ -110,7 +110,7 @@ a{ color:inherit; text-decoration:none; }
 
   .cc-headerInner{
     height: auto;
-    min-height: unset;
+    min-height: un;
     padding: 16px 18px 14px;   /* balanced padding inside paper */
     display: grid;
     grid-template-columns: 1fr auto;
