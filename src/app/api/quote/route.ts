@@ -3,13 +3,25 @@ import { NextResponse } from "next/server";
 type AnyObj = Record<string, any>;
 
 function isValidEmail(v: unknown) {
-  if (typeof v !== "string") return false;
-  return v.includes("@") && v.includes(".");
+  return typeof v === "string" && v.includes("@") && v.includes(".");
 }
 
 function normalizePhone(v: unknown) {
   if (typeof v !== "string") return "";
   return v.replace(/[^0-9]/g, "");
+}
+
+function mmddyyyy(d: Date) {
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  const yyyy = String(d.getFullYear());
+  return `${mm}/${dd}/${yyyy}`;
+}
+
+function getClientIp(req: Request) {
+  const xff = req.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  return req.headers.get("x-real-ip") ?? "";
 }
 
 export async function POST(req: Request) {
@@ -22,11 +34,10 @@ export async function POST(req: Request) {
     const comments = String(body?.comments ?? "").trim();
 
     const design = body?.design ?? null;
-    const summaryLines = Array.isArray(body?.summaryLines) ? body.summaryLines : [];
+    const displayLayout = Array.isArray(body?.summaryLines) ? body.summaryLines : [];
 
     const phoneDigits = normalizePhone(phoneRaw);
 
-    // Minimal validation (same rule as UI)
     if (name.length < 2) {
       return NextResponse.json({ error: "Name is required." }, { status: 400 });
     }
@@ -42,36 +53,34 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing design data." }, { status: 400 });
     }
 
-    // OPTIONAL: basic size guard so someone can't spam a massive payload
     const rawSize = JSON.stringify(body).length;
     if (rawSize > 150_000) {
       return NextResponse.json({ error: "Payload too large." }, { status: 413 });
     }
 
-    const payload = {
-      createdAt: new Date().toISOString(),
+    const now = new Date();
+
+    // ✅ This is the ONLY thing you log (exactly like your desired output)
+    const receipt = {
+      createdDate: mmddyyyy(now),
       contact: {
         name,
         phone: phoneRaw,
-        phoneDigits,
         email,
       },
       comments,
-      summaryLines,
-      design,
+      displayLayout,
       meta: {
+        ip: getClientIp(req),
         userAgent: req.headers.get("user-agent") ?? "",
-        ip:
-          req.headers.get("x-forwarded-for") ??
-          req.headers.get("x-real-ip") ??
-          "",
       },
     };
 
-    // For now: log it (works locally + on server logs).
-    console.log("NEW QUOTE REQUEST:", JSON.stringify(payload, null, 2));
+    console.log("NEW QUOTE REQUEST:", JSON.stringify(receipt, null, 2));
 
-    // Later: send email (Resend) or save to DB (Supabase) here.
+    // OPTIONAL: keep the full payload for later (email/DB) but DO NOT log it
+    // const fullPayload = { ...receipt, createdAt: now.toISOString(), design };
+    // await saveToDb(fullPayload) or sendEmail(fullPayload)
 
     return NextResponse.json({ ok: true });
   } catch (e: any) {
