@@ -228,7 +228,7 @@ html, body{
 @media (max-width: 640px){
   .cc-paper,
   .cc-shell{
-    overflow-x: flex !important;   /* or hidden */
+    overflow-x: hidden !important;   /* or hidden */
     max-width: 100%;
   }
 
@@ -354,7 +354,7 @@ html, body{
   }
 
   .cc-brandImg{
-    transform: translateX(-52px) translateY(40px);
+    transform: translateX(-52px) translateY(34px);
   }
 
   .cc-navRight{ justify-content: flex-end; }
