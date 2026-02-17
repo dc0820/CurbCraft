@@ -262,7 +262,7 @@ html, body{
     gap: 3px !important;
     white-space: nowrap !important;
     min-width: 0;
-    transform: translateY(-10px);
+    transform: translateY(-4px);
   }
 
   /* hide FAQ on phone so header doesn't collide */
