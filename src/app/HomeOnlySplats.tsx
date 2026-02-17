@@ -3,28 +3,34 @@
 
 import { usePathname } from "next/navigation";
 
+const SPLATS = [
+  { cls: "cc-splat-pink", src: "/Logos/paint/paint-pink.png" },
+  { cls: "cc-splat-purple", src: "/Logos/paint/paint-purple.png" },
+  { cls: "cc-splat-yellow", src: "/Logos/paint/paint-yellow.png" },
+  { cls: "cc-splat-green", src: "/Logos/paint/paint-green.png" },
+];
+
+function SplatLayer({ className }: { className: string }) {
+  return (
+    <div className={className} aria-hidden="true">
+      {SPLATS.map((s) => (
+        <img key={s.cls} className={`cc-splat ${s.cls}`} src={s.src} alt="" />
+      ))}
+    </div>
+  );
+}
+
 export default function HomeOnlySplats() {
   const pathname = usePathname();
   if (pathname !== "/") return null;
 
   return (
-    <div
-      className="cc-splats-front"
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        left: 0,
-        top: 0,
-        width: "100%",
-        height: 300,
-        pointerEvents: "none",
-        zIndex: 3,
-      }}
-    >
-      <img className="cc-splat cc-splat-pink" src="/Logos/paint/paint-pink.png" alt="" />
-      <img className="cc-splat cc-splat-purple" src="/Logos/paint/paint-purple.png" alt="" />
-      <img className="cc-splat cc-splat-yellow" src="/Logos/paint/paint-yellow.png" alt="" />
-      <img className="cc-splat cc-splat-green" src="/Logos/paint/paint-green.png" alt="" />
-    </div>
+    <>
+      {/* BACK splats (behind everything) */}
+      <SplatLayer className="cc-splats-back" />
+
+      {/* FRONT splats (same exact coords, just higher z-index) */}
+      <SplatLayer className="cc-splats-front" />
+    </>
   );
 }
