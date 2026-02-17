@@ -36,14 +36,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <header className="cc-header">
               <div className="cc-headerInner cc-container">
                 <nav className="cc-navLeft" aria-label="Primary">
-                  <Link href="/" className="cc-navLink cc-hover cc-rainbow-hover">
-                    Home
-                  </Link>
                   <Link href="/gallery" className="cc-navLink cc-hover cc-rainbow-hover">
                     Gallery
                   </Link>
                   <Link href="/pricing" className="cc-navLink cc-hover cc-rainbow-hover">
                     Pricing
+                  </Link>
+                  <Link href="/faq" className="cc-faqLink cc-hover cc-rainbow-hover" aria-label="FAQ">
+                    ★ FAQs ★
                   </Link>
                 </nav>
 
@@ -56,9 +56,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 </Link>
 
                 <div className="cc-navRight">
-                  <Link href="/faq" className="cc-faqLink cc-hover cc-rainbow-hover" aria-label="FAQ">
-                    ★ FAQs ★
-                  </Link>
 
                   <Link href="/quote" className="cc-cta cc-hover">
                     Get a Quote
