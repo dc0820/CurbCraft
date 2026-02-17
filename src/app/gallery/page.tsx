@@ -49,7 +49,7 @@ const CARDS: {
   {
     tier: "sports",
     title: "Sports Team",
-    desc: "Pick a team and we place logos on the plate (from your /public/logos folder).",
+    desc: "Select your league and team from our catalog to generate a branded curb design with matching colors and logos.",
     href: "/create?tier=sports",
     priceLabel: "$60",
     config: {
