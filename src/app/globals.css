@@ -107,6 +107,11 @@ html, body{
     0 10px 22px rgba(0,0,0,.12);
 }
 
+/* ✅ FRONT SPLATS: ALWAYS BEHIND header + hero text */
+/* Paint splats: above hero overlay (z=2), below hero text (z=20) */
+/* FRONT SPLATS: same coordinate system as .cc-splats (the back splats) */
+/* FRONT SPLATS — same width + same origin as back splats */
+/* ✅ FRONT SPLATS: match BACK splats container exactly */
 /* ✅ FRONT SPLATS: match BACK splats X/Y by using the paper's coordinate system */
 .cc-splats-front{
   pointer-events: none;
@@ -221,11 +226,15 @@ html, body{
 ========================================= */
 
 @media (max-width: 640px){
-
-  /* prevent any horizontal clipping / weird overflow */
   .cc-paper,
   .cc-shell{
-    overflow-x: clip !important;
+    overflow-x: hidden !important;   /* or hidden */
+    max-width: 100%;
+  }
+
+  /* extra safety: kill any 100vw overflow inside pages */
+  .cc-shell *{
+    max-width: 100%;
   }
 
   /* ---------- Header: 1 row, logo centered ---------- */
@@ -244,7 +253,7 @@ html, body{
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    gap: 3px !important;
+    gap: 0px !important;
     flex-wrap: nowrap !important;
     white-space: nowrap !important;
     min-width: 0;
