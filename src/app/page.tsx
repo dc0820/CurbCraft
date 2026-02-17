@@ -128,13 +128,13 @@ export default function HomePage() {
       src: SPLOTCH.orange,
       w: SPLAT_MD,
       h: SPLAT_MD,
-      style: { left: 430, top: 20, opacity: 0.7, transform: "rotate(14deg)" },
+      style: { left: 430, top: -20, opacity: 0.3, transform: "rotate(-12deg)" },
     },
     {
       src: SPLOTCH.red,
       w: SPLAT_MD,
       h: SPLAT_MD,
-      style: { right: 600, top: 185, opacity: 0.8, transform: "rotate(-1deg)" },
+      style: { right: 630, top: 185, opacity: 0.77, transform: "rotate(-1deg)" },
     },
 
     // BIG splat: use lightly, off to a side
