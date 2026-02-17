@@ -118,8 +118,8 @@ html, body{
   position: absolute;
 
   /* key change: align to the paper, not re-centering again */
-  left: -1;
-  top: -90;
+  left: -1px;
+  top: -90px;
   transform: none;
 
   /* paper is already var(--cc-paperW), so 100% == back splats width */
