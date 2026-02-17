@@ -268,9 +268,10 @@ export default function HomePage() {
                 CUSTOMS
               </span>
             </h1>
-
-            <div style={taglinePill}>Transforming Curbs, One Design a Time!</div>
-          </div>
+              <div className="cc-taglinePill" style={taglinePill}>
+                Transforming Curbs, One Design a Time!
+              </div>
+            </div>
         </div>
       </section>
 
