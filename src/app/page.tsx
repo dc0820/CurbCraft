@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import HomePreviewRotator from "@/app/HomePreviewRotator";
+import HomeOnlySplats from "@/app/HomeOnlySplats";
 
 const HERO_IMAGE = "/Logos/Curb-welcome-page.png";
 
@@ -93,7 +94,7 @@ export default function HomePage() {
       src: SPLOTCH.gold,
       w: SPLAT_MD,
       h: SPLAT_MD,
-      style: { left: -45, top: 145, opacity: 0.99, transform: "rotate(8deg)" },
+      style: { left: -45, top: 145, opacity: 0.65, transform: "rotate(8deg)" },
     },
     {
       src: SPLOTCH.darkPink,
@@ -107,7 +108,7 @@ export default function HomePage() {
       src: SPLOTCH.hotPink,
       w: SPLAT_LG,
       h: SPLAT_LG,
-      style: { right: 50, top: 170, opacity: 0.75, transform: "rotate(6deg)" },
+      style: { right: 50, top: 170, opacity: 0.55, transform: "rotate(6deg)" },
     },
     {
       src: SPLOTCH.limeGreen,
@@ -226,8 +227,13 @@ export default function HomePage() {
             style={{ objectFit: "cover", objectPosition: "center 57%" }}
           />
 
+          {/* Darken photo only */}
           <div style={heroOverlay} />
 
+          {/* ✅ Paint splats: in front of photo + overlay, but under text */}
+          <HomeOnlySplats />
+
+          {/* Sticker splats (also under text) */}
           {heroSplats.map((s, i) => {
             const isTopLayer = s.src === SPLOTCH.gold || s.src === SPLOTCH.red;
             const isBlue = s.src === SPLOTCH.blue;
@@ -249,6 +255,7 @@ export default function HomePage() {
             );
           })}
 
+          {/* Text ALWAYS on top */}
           <div style={heroContent}>
             <h1 style={heroTitle} className="cc-heroTitle">
               <span className="cc-stroke-black">
@@ -352,7 +359,7 @@ export default function HomePage() {
 
 /* ---------------- STYLES ---------------- */
 
-const pageWrap: CSSProperties = { width: "100%" };
+const pageWrap: CSSProperties = { width: "100%", position: "relative" };
 
 /* HERO */
 const heroOuter: CSSProperties = { background: "#fff" };
