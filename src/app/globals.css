@@ -31,6 +31,12 @@ html,body{
 *{ box-sizing:border-box; }
 a{ color:inherit; text-decoration:none; }
 
+/* Prevent sideways scroll on mobile (your “drag right but not left” issue) */
+html, body{
+  overflow-x: hidden;
+}
+
+
 /* -------------------------
    Stage / Paper layering
    (THIS fixes splats depth)
@@ -205,9 +211,12 @@ a{ color:inherit; text-decoration:none; }
    Mobile header layout
    ------------------------- */
 @media (max-width: 640px){
-  /* header should not stick on mobile */
+  /* Header must be positioned so z-index works (no sticky, but still on top) */
   .cc-header{
-    position: static;
+    position: relative;   /* ✅ NOT static */
+    top: auto;
+    z-index: 200;         /* ✅ stays above hero splats */
+    background: #fff;
   }
 
   .cc-headerInner{
@@ -216,12 +225,12 @@ a{ color:inherit; text-decoration:none; }
     padding: 14px 14px 12px;
     display: grid;
 
-    /* 2 columns on row 1, logo spans row 2 */
-    grid-template-columns: 1fr auto;
+    /* Row 1: Home/Gallery/Pricing + FAQs/Get a Quote
+       Row 2: centered logo */
+    grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "links actions"
       "brand brand";
-
     row-gap: 10px;
     column-gap: 10px;
     align-items: center;
@@ -230,50 +239,50 @@ a{ color:inherit; text-decoration:none; }
   .cc-navLeft{
     grid-area: links;
     display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;           /* ✅ allows wrap instead of overflow */
     justify-content: flex-start;
+    gap: 14px;
+    flex-wrap: nowrap;
+    min-width: 0;
   }
 
   .cc-navRight{
     grid-area: actions;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     gap: 10px;
-    justify-content: flex-end;
     flex-wrap: nowrap;
-    white-space: nowrap;
+    min-width: 0;
   }
 
   .cc-brand{
     grid-area: brand;
     display: flex;
-    justify-content: center;   /* ✅ centered under top row */
+    justify-content: center;   /* ✅ centered logo under row 1 */
     align-items: center;
   }
 
   .cc-brandImg{
-    width: 125px;
+    width: 120px;
     height: auto;
-    transform: none;           /* ✅ don’t push down on mobile */
+    transform: none;
   }
 
   .cc-navLink{
     padding: 6px 8px;
-    font-size: 15px;
+    font-size: 14px;
     white-space: nowrap;
   }
 
   .cc-faqLink{
-    padding: 6px 8px;
-    font-size: 14px;
+    padding: 8px 10px;
+    font-size: 13px;
     white-space: nowrap;
   }
 
   .cc-cta{
-    padding: 10px 14px;
-    font-size: 14px;
+    padding: 10px 12px;
+    font-size: 13px;
     margin-left: 0;
     white-space: nowrap;
   }
