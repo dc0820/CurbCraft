@@ -284,6 +284,8 @@ html, body{
   .cc-brandImg{
     width: 108px !important;
     height: auto !important;
+    transform: translateY(-4px) !important;
+     /* 🔥 remove the desktop transform, which is too extreme for mobile */
   }
 
   .cc-navLink{
