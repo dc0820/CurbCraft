@@ -225,7 +225,7 @@ html, body{
   /* prevent any horizontal clipping / weird overflow */
   .cc-paper,
   .cc-shell{
-    overflow-x: flex !important;
+    overflow-x: clip !important;
   }
 
   /* ---------- Header: 1 row, logo centered ---------- */
