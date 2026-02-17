@@ -228,7 +228,7 @@ html, body{
 @media (max-width: 640px){
   .cc-paper,
   .cc-shell{
-    overflow-x: hidden !important;   /* or hidden */
+    overflow-x: flex !important;   /* or hidden */
     max-width: 100%;
   }
 
