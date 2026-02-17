@@ -353,7 +353,7 @@ html, body{
   }
 
   .cc-brandImg{
-    transform: translateY(34px);
+    transform: translateX(-40px) translateY(40px);
   }
 
   .cc-navRight{ justify-content: flex-end; }
