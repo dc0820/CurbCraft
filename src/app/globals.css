@@ -106,20 +106,28 @@ html, body{
 }
 
 /* ✅ FRONT SPLATS: ALWAYS BEHIND header + hero text */
+/* Paint splats: above hero overlay (z=2), below hero text (z=20) */
+/* FRONT SPLATS: same coordinate system as .cc-splats (the back splats) */
 .cc-splats-front{
   pointer-events: none;
   position: absolute;
-  left: 0;
+
+  /* ✅ match .cc-splats exactly */
+  left: 50%;
   top: 0;
-  width: 100%;
+  transform: translateX(-50%);
+  width: min(1040px, calc(100% - 28px));
   height: 300px;
 
-  /* IMPORTANT:
-     z-index stays LOW.
-     header + hero text are higher.
-  */
-  z-index: 0;
+  /* ✅ in front of hero image/overlay, under hero text */
+  z-index: 10;
 }
+
+/* Optional: mobile tighten */
+@media (max-width: 640px){
+  .cc-splats-front{ height: 380px; }
+}
+
 
 /* Keep header + rest of content above splats-front */
 .cc-header,
@@ -201,90 +209,57 @@ html, body{
 /* -------------------------
    Mobile header layout (THINNER + better spacing)
    ------------------------- */
-@media (max-width: 640px){
-  .cc-header{
-    position: relative;
-    top: auto;
-    z-index: 300;
-    background: #fff;
-  }
-
+/* -------------------------
+   Mobile header fixes
+   ------------------------- */
+@media (max-width: 640px) {
   .cc-headerInner{
-    height: auto;
-    min-height: unset;
+    height: 52px;
+    min-height: 52px;
 
-    /* ✅ thinner white strip */
-    padding: 10px 12px 8px;
-
-    display: grid;
-
-    /* row1: links + actions, row2: logo centered */
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "links actions"
-      "brand brand";
-
-    row-gap: 6px;
-    column-gap: 12px;
-    align-items: center;
+    /* change grid so left/right size to content */
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    padding: 0 10px;
   }
 
+  /* Left nav: keep in one line, smaller */
   .cc-navLeft{
-    grid-area: links;
     display: flex;
-    justify-content: flex-start;
+    gap: 6px;
     align-items: center;
-
-    /* ✅ better spacing without crowding */
-    gap: 16px;
-
     flex-wrap: nowrap;
-    min-width: 0;
-  }
-
-  .cc-navRight{
-    grid-area: actions;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: nowrap;
-    min-width: 0;
-  }
-
-  .cc-brand{
-    grid-area: brand;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 2px;
-  }
-
-  /* ✅ smaller logo => less white space */
-  .cc-brandImg{
-    width: 96px;
-    height: auto;
-    transform: none;
-    filter: drop-shadow(0 8px 10px rgba(0,0,0,0.18));
+    white-space: nowrap;
   }
 
   .cc-navLink{
-    padding: 6px 6px;
-    font-size: 14px;
+    font-size: 13px;
+    padding: 8px 8px;
+    border-radius: 10px;
+  }
+
+  /* Middle logo smaller so header stays thin */
+  .cc-brandImg{
+    width: 108px;
+    height: auto;
+  }
+
+  /* Right side: remove FAQ on mobile to stop collisions */
+  .cc-navRight{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
     white-space: nowrap;
   }
 
   .cc-faqLink{
-    padding: 8px 8px;
-    font-size: 13px;
-    white-space: nowrap;
+    display: none;
   }
 
   .cc-cta{
-    padding: 10px 10px;
+    padding: 8px 12px;
     font-size: 13px;
-    margin-left: 0;
-    white-space: nowrap;
   }
 
   /* ✅ if someone’s phone is super narrow, slightly reduce link spacing */
@@ -588,3 +563,4 @@ html, body{
   0% { background-position: 0% 50%; }
   100% { background-position: 100% 50%; }
 }
+
