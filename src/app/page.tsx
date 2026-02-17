@@ -134,7 +134,7 @@ export default function HomePage() {
       src: SPLOTCH.red,
       w: SPLAT_MD,
       h: SPLAT_MD,
-      style: { right: 600, top: 185, opacity: 0.9, transform: "rotate(-1deg)" },
+      style: { right: 600, top: 185, opacity: 0.8, transform: "rotate(-1deg)" },
     },
 
     // BIG splat: use lightly, off to a side
