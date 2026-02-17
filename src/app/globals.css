@@ -563,4 +563,30 @@ html, body{
   0% { background-position: 0% 50%; }
   100% { background-position: 100% 50%; }
 }
+/* =========================
+   HOME-ONLY FRONT SPLATS (safe)
+   - centered like back splats
+   - sits behind header + hero text
+   - scales down on mobile
+========================= */
+
+.cc-home-splats{
+  pointer-events:none;
+  position:absolute;
+  left:50%;
+  top:0;
+  transform: translateX(-50%);
+  width: min(1040px, calc(100% - 28px));
+  height: 300px;
+  z-index: 2; /* header is 200, hero text is above */
+}
+
+@media (max-width: 640px){
+  .cc-home-splats{
+    top: 52px; /* below mobile header */
+    transform: translateX(-50%) scale(.78);
+    transform-origin: top center;
+    height: 260px;
+  }
+}
 
