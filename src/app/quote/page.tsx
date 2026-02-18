@@ -4,8 +4,9 @@ import { Suspense, useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CurbDesigner from "@/components/CurbDesigner";
+import type { DesignConfig } from "@/lib/templates";
 
-type AnyObj = Record<string, any>;
+type AnyObj = Record<string, unknown>;
 
 const CC_GOLD = "#ffc20e";
 const CC_GOLD_TEXT = "#111";
@@ -58,7 +59,8 @@ function QuotePageInner() {
     if (!design) return [];
 
     const cfg = design as AnyObj;
-    const p = cfg.price ?? {};
+    const p = (cfg.price ?? {}) as { label?: string };
+    const colors = (cfg.colors ?? {}) as { bg?: string; text?: string; border?: string };
 
     const uiTier =
       (cfg.uiTier as string | undefined) ??
@@ -69,7 +71,7 @@ function QuotePageInner() {
     const lines: string[] = [];
     lines.push(`Tier: ${uiTier}`);
     lines.push(`Address: ${String(cfg.address ?? "")}`);
-    if (p?.label) lines.push(`Price: ${String(p.label)}`);
+    if (p.label) lines.push(`Price: ${String(p.label)}`);
 
     // Sports specifics
     if (cfg.tier === "sports" || uiTier === "sports") {
@@ -95,9 +97,9 @@ function QuotePageInner() {
 
     // Custom specifics
     if (uiTier === "custom" || cfg.tier === "custom") {
-      if (cfg.colors?.bg) lines.push(`Custom BG: ${cfg.colors.bg}`);
-      if (cfg.colors?.text) lines.push(`Custom Text: ${cfg.colors.text}`);
-      if (cfg.colors?.border) lines.push(`Custom Border: ${cfg.colors.border}`);
+      if (colors.bg) lines.push(`Custom BG: ${colors.bg}`);
+      if (colors.text) lines.push(`Custom Text: ${colors.text}`);
+      if (colors.border) lines.push(`Custom Border: ${colors.border}`);
     }
 
     return lines;
@@ -133,8 +135,8 @@ function QuotePageInner() {
 
       setSubmitOk(true);
       setComments("");
-    } catch (e: any) {
-      setSubmitErr(e?.message ?? "Failed to submit quote request.");
+    } catch (e: unknown) {
+      setSubmitErr(e instanceof Error ? e.message : "Failed to submit quote request.");
     } finally {
       setIsSubmitting(false);
     }
@@ -173,7 +175,7 @@ function QuotePageInner() {
               <div style={cardTitle}>Preview</div>
 
               <div style={previewFrame}>
-                <CurbDesigner config={design as any} />
+                <CurbDesigner config={design as unknown as DesignConfig} />
               </div>
 
               <div style={miniNote}>This preview matches your selection from the Create page.</div>
