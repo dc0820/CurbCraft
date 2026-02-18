@@ -340,7 +340,7 @@ function CreatePageInner() {
     : "Start with your selection → enter your address → add options.";
 
   return (
-    <div style={pageContainer}>
+    <div style={pageContainer} className="cc-createPage">
       <div style={{ display: "grid", gap: 14 }}>
         <div style={pageHeader}>
           <div style={{ textAlign: "left" }}>
@@ -348,7 +348,7 @@ function CreatePageInner() {
             <p style={pageSubtitle}>{subtitleText}</p>
           </div>
 
-          <div style={pricePill}>
+          <div style={pricePill} className="cc-createPricePill">
             <div style={{ fontSize: 12, opacity: 0.75 }}>Price</div>
             <div style={{ fontSize: 20, fontWeight: 900 }}>{price.label}</div>
           </div>
@@ -915,7 +915,7 @@ function CreatePageInner() {
 const pageContainer: CSSProperties = {
   maxWidth: 1200,
   margin: "0 auto",
-  padding: "0 24px",
+  padding: "0 clamp(12px, 4vw, 24px)",
 };
 
 const pageHeader: CSSProperties = {
@@ -928,7 +928,7 @@ const pageHeader: CSSProperties = {
 
 const pageTitle: CSSProperties = {
   margin: 0,
-  fontSize: 42,
+  fontSize: "clamp(34px, 8.8vw, 42px)",
   fontWeight: 900,
   letterSpacing: -0.5,
 };
@@ -937,13 +937,13 @@ const pageSubtitle: CSSProperties = {
   marginTop: 10,
   marginBottom: 0,
   opacity: 0.75,
-  fontSize: 16,
+  fontSize: "clamp(14px, 3.8vw, 16px)",
 };
 
 const layout: CSSProperties = {
   display: "grid",
   gap: 12,
-  gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
   alignItems: "start",
 };
 
@@ -982,6 +982,8 @@ const tierBtn: CSSProperties = {
   borderRadius: 14,
   padding: "10px 12px",
   fontWeight: 900,
+  lineHeight: 1.2,
+  whiteSpace: "normal",
   cursor: "pointer",
 };
 
@@ -990,6 +992,8 @@ const pillBtn: CSSProperties = {
   borderRadius: 999,
   padding: "10px 12px",
   fontWeight: 900,
+  lineHeight: 1.2,
+  whiteSpace: "normal",
   cursor: "pointer",
   background: "#f3f3f3",
 };
@@ -1009,6 +1013,8 @@ const segmentBtn: CSSProperties = {
   cursor: "pointer",
   border: "none",
   fontWeight: 900,
+  lineHeight: 1.2,
+  whiteSpace: "normal",
 };
 
 const segmentBtnActive: CSSProperties = {

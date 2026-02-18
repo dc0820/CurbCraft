@@ -3,12 +3,16 @@
 
 import { usePathname } from "next/navigation";
 
-export default function HomeOnlySplats() {
+type HomeOnlySplatsProps = {
+  variant?: "header" | "hero";
+};
+
+export default function HomeOnlySplats({ variant = "header" }: HomeOnlySplatsProps) {
   const pathname = usePathname();
   if (pathname !== "/") return null;
 
   return (
-    <div className="cc-splats-front" aria-hidden="true">
+    <div className={`cc-splats-front cc-splats-front--${variant}`} aria-hidden="true">
       <img className="cc-splat cc-splat-pink" src="/Logos/paint/paint-pink.png" alt="" />
       <img className="cc-splat cc-splat-purple" src="/Logos/paint/paint-purple.png" alt="" />
       <img className="cc-splat cc-splat-yellow" src="/Logos/paint/paint-yellow.png" alt="" />

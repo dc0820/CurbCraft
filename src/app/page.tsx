@@ -231,7 +231,7 @@ export default function HomePage() {
           <div style={heroOverlay} />
 
           {/* ✅ Paint splats: in front of photo + overlay, but under text */}
-          <HomeOnlySplats />
+          <HomeOnlySplats variant="hero" />
 
           {/* Sticker splats (also under text) */}
           {heroSplats.map((s, i) => {
@@ -242,6 +242,7 @@ export default function HomePage() {
             return (
               <div
                 key={`hero-splat-wrap-${i}`}
+                className={`cc-heroSplat cc-heroSplat-${i}`}
                 style={{
                   ...splotchHeroWrap,
                   zIndex: z,
@@ -276,7 +277,7 @@ export default function HomePage() {
       </section>
 
       {/* GALLERY */}
-      <section style={galleryOuter}>
+      <section style={galleryOuter} className="cc-homeGallery">
         <div style={leftBlock} />
         <div style={rightBlock} />
         <div style={centerTealPlate} />
@@ -570,7 +571,7 @@ const cardTextWrap: CSSProperties = {
   textAlign: "center",
 };
 
-const cardHeading: CSSProperties = { fontWeight: 1000 as any, letterSpacing: 0.4 };
+const cardHeading: CSSProperties = { fontWeight: 1000, letterSpacing: 0.4 };
 const cardSub: CSSProperties = { marginTop: 6, opacity: 0.8 };
 
 const makeOwnWrap: CSSProperties = {
@@ -591,7 +592,7 @@ const makeOwnBtnRainbow: CSSProperties = {
   color: "#fff",
   padding: "12px 18px",
   borderRadius: 999,
-  fontWeight: 1000 as any,
+  fontWeight: 1000,
   textDecoration: "none",
   border: "1px solid rgba(0,0,0,0.10)",
   boxShadow: "0 18px 36px rgba(0,0,0,0.22)",
