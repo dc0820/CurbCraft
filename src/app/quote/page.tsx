@@ -45,7 +45,7 @@ function QuotePageInner() {
   const [submitOk, setSubmitOk] = useState(false);
   const [submitErr, setSubmitErr] = useState<string>("");
 
-  const priceLabel = design?.price?.label ?? "";
+  const priceLabel = ((design?.price as { label?: string } | undefined)?.label ?? "") as string;
 
   // ✅ Display tier: prefer uiTier -> texasMode -> tier
   const displayTier =
